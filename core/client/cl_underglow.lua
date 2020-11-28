@@ -31,7 +31,7 @@ local function LightLogic()
     VehiclesWithNeons[vehicle] = not neonsOn
 end
 
-RegisterCommand("ToggleNeons", function()
+RegisterCommand(Config.ChatCommand, function()
     if antiSpam then return end
 
 	local playerPed = GetPlayerPed(-1)
@@ -41,11 +41,13 @@ RegisterCommand("ToggleNeons", function()
 	LightLogic()
 	antiSpam = true
 
-	Wait(1250)
+	Wait(Config.Delay)
 	antiSpam = false
 end, false)
 
-RegisterKeyMapping('ToggleNeons', 'Toggle Underglow', 'keyboard', 'g')
+if Config.UseKeybind then
+    RegisterKeyMapping(Config.ChatCommand, 'Toggle Underglow', 'keyboard', 'g')
+end
 
 local function CheckVehicles()
     for k,v in pairs(VehiclesWithNeons) do
