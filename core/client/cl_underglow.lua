@@ -14,7 +14,7 @@ end
 
 local function LightLogic()
 	local playerPed = GetPlayerPed(-1)
-    local vehicle = GetVehiclePedIsIn(playerPed, false)
+    	local vehicle = GetVehiclePedIsIn(playerPed, false)
 
 	if not vehicle or not IsPedInAnyVehicle(playerPed, false) or GetPedInVehicleSeat(vehicle, -1) ~= playerPed then return end -- ignore if not in car or driver seat
 	
@@ -22,20 +22,20 @@ local function LightLogic()
 
 	if not hasNeons then return end
     
-    local neonsOn = (VehiclesWithNeons[vehicle] ~= nil and VehiclesWithNeons[vehicle] or false)
+    	local neonsOn = (VehiclesWithNeons[vehicle] ~= nil and VehiclesWithNeons[vehicle] or false)
 
 	SetVehicleNeonLightEnabled(vehicle, 0, not neonsOn)
 	SetVehicleNeonLightEnabled(vehicle, 1, not neonsOn)
 	SetVehicleNeonLightEnabled(vehicle, 2, not neonsOn)
 	SetVehicleNeonLightEnabled(vehicle, 3, not neonsOn)
-    VehiclesWithNeons[vehicle] = not neonsOn
+    	VehiclesWithNeons[vehicle] = not neonsOn
 end
 
 RegisterCommand(Config.ChatCommand, function()
-    if antiSpam then return end
-
+	if antiSpam then return end
+		
 	local playerPed = GetPlayerPed(-1)
-    local vehicle = GetVehiclePedIsIn(playerPed, false)
+	local vehicle = GetVehiclePedIsIn(playerPed, false)
 	if not vehicle or not IsPedInAnyVehicle(playerPed, false) or GetPedInVehicleSeat(vehicle, -1) ~= playerPed then return end
 
 	LightLogic()
@@ -46,14 +46,14 @@ RegisterCommand(Config.ChatCommand, function()
 end, false)
 
 if Config.UseKeybind then
-    RegisterKeyMapping(Config.ChatCommand, 'Toggle Underglow', 'keyboard', 'g')
+    RegisterKeyMapping(Config.ChatCommand, 'Toggle Underglow', 'keyboard', Config.DefaultKeyBind or 'g')
 end
 
 local function CheckVehicles()
     for k,v in pairs(VehiclesWithNeons) do
         local valid = DoesEntityExist(k)
 
-        if not valid or valid == nil then
+        if (not valid) then
             VehiclesWithNeons[k] = nil
             return
         end
@@ -62,3 +62,5 @@ local function CheckVehicles()
     Wait(300000)
     CheckVehicles()
 end
+
+CheckVehicles()
